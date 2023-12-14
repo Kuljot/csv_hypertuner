@@ -1,5 +1,58 @@
+import sys
+import os
+import dill
 import pandas as pd
 import streamlit as st
+from sklearn.metrics import r2_score
+from src.exception import CustomException
+
+
+def save_object(file_path,obj):
+    try:
+        dir_path=os.path.dirname(file_path)
+        os.makedirs(dir_path,exist_ok=True)
+
+        with open(file_path,"wb") as file_obj:
+            dill.dump(obj,file_obj)
+    except Exception as e:
+        raise CustomException(e,sys)
+
+def evaluate_model(x_train,y_train,x_test,y_test,models):
+    try:
+        report={}
+        #st.data_editor(y_train)
+        for i in range(len(list(models))):
+            model=list(models.values())[i]
+            # model=DecisionTreeClassifier()
+            st.write(list(models.values())[i])
+            try:
+                st.write("Training model...")
+                st.write(model.fit(x_train,y_train))
+                st.write("Model training completed.")
+
+            except Exception as e:
+                raise CustomException(e,sys)
+
+            
+            y_train_pred=model.predict(x_train)
+            y_test_pred=model.predict(x_test)
+
+            train_model_score=r2_score(y_train,y_train_pred)
+            test_model_score=r2_score(y_test,y_test_pred)
+
+            report[list(models.keys())[i]]= test_model_score
+            print(report)
+            st.write(report)
+        return report
+    except Exception as e:
+        raise CustomException(e,sys)
+
+def load_object(file_path):
+    try:
+        with open(file_path,"rb") as file_obj:
+            return dill.load(file_obj)
+    except Exception as e:
+        raise CustomException(e,sys)
 
 class Visualizer:
     def __init__(self,num_columns,cat_columns):
@@ -90,4 +143,4 @@ class Visualizer:
             problem_type='classification'
 
         return target,problem_type
-            
+

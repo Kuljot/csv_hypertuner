@@ -5,7 +5,9 @@ import pandas as pd
 import pickle
 from components.data_ingestion import DataIngestion
 from components.data_transformation import DataTransformation
-from utils import Visualizer
+from components.model_trainer import ModelTrainer
+
+from components.utils import Visualizer
 
 st.title("CSV to ML")
 st.write('An auto EDA, Hyperparameter tuning & Prediction service for csv files')
@@ -40,21 +42,40 @@ if uploaded_file is not None:
 
 	#Select the Target column
 	target,problem_type=viz.target_col(df)
-
+	st.write(problem_type)
 	proceed=st.button('Proceed')
 	if not proceed:
 		st.warning('Proceed with training')
-		st.stop()
+		#st.stop()
 	st.success('Doing data transformation')
 	
 	data_transformation.num_cat_columns=viz.num_cat_columns
-	transformer =data_transformation.get_data_transformer_object()
+	# transformer=data_transformation.get_data_transformer_object()
+	X_train,y_train,X_test,y_test,_,_=data_transformation.initiate_data_transformation(target)
 
-	#modeltrainer=ModelTrainer()
-	# print(modeltrainer.initiate_model_trainer(train_arr,test_arr))
-
+	modeltrainer=ModelTrainer()
 	
+	if problem_type=='regression':
+		best_model,models,best_score,scores=modeltrainer.initiate_model_trainer(X_train,y_train,X_test,y_test,modeltrainer.regression_param_space)
+	else:
+		best_model,models,best_score,scores=modeltrainer.initiate_model_trainer(X_train,y_train,X_test,y_test,modeltrainer.classification_param_space)
+
+	st.write("Initial estimates suggests "+str(best_model)+" is best fitting the data")
+	st.write("Report for the models used and their accuracy")
+	st.data_editor(pd.concat([pd.DataFrame(models),pd.DataFrame(scores)],axis=1, ignore_index=True))
+	
+	target_model = st.multiselect(
+            'Select the model to proceed with hyperparameter tuning',
+            models)
+
+	# proceed_1=st.button('Proceed for tuning')
+	# if not proceed_1:
+	# 	st.warning('Proceed with hyper-parameter tuning')
+	# 	st.stop()
+	# else:
+	# 	st.success('Starting')
 else:
     st.header("Please upload a csv file")
 
     
+

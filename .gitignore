@@ -121,6 +121,7 @@ celerybeat.pid
 
 # Environments
 .env
+.vscode
 .venv
 env/
 src/logs/
