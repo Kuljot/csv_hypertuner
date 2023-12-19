@@ -1,66 +1,13 @@
-import sys
-import os
-import dill
 import pandas as pd
 import streamlit as st
-from sklearn.metrics import r2_score
-from src.exception import CustomException
-
-
-def save_object(file_path,obj):
-    try:
-        dir_path=os.path.dirname(file_path)
-        os.makedirs(dir_path,exist_ok=True)
-
-        with open(file_path,"wb") as file_obj:
-            dill.dump(obj,file_obj)
-    except Exception as e:
-        raise CustomException(e,sys)
-
-def evaluate_model(x_train,y_train,x_test,y_test,models):
-    try:
-        report={}
-        #st.data_editor(y_train)
-        for i in range(len(list(models))):
-            model=list(models.values())[i]
-            # model=DecisionTreeClassifier()
-            st.write(list(models.values())[i])
-            try:
-                st.write("Training model...")
-                st.write(model.fit(x_train,y_train))
-                st.write("Model training completed.")
-
-            except Exception as e:
-                raise CustomException(e,sys)
-
-            
-            y_train_pred=model.predict(x_train)
-            y_test_pred=model.predict(x_test)
-
-            train_model_score=r2_score(y_train,y_train_pred)
-            test_model_score=r2_score(y_test,y_test_pred)
-
-            report[list(models.keys())[i]]= test_model_score
-            print(report)
-            st.write(report)
-        return report
-    except Exception as e:
-        raise CustomException(e,sys)
-
-def load_object(file_path):
-    try:
-        with open(file_path,"rb") as file_obj:
-            return dill.load(file_obj)
-    except Exception as e:
-        raise CustomException(e,sys)
-
 class Visualizer:
-    def __init__(self,num_columns,cat_columns):
+    def __init__(self,num_columns:list,cat_columns:list):
         self.num_columns=num_columns
         self.cat_columns=cat_columns
         self.num_cat_columns=[]
-
-    def outliers_count(self,df:pd.DataFrame):
+        self.options=num_columns
+      
+    def outliers_count(self,df:pd.DataFrame)->int:
         quartiles = df.quantile([0.25, 0.75])
         IQR = quartiles[0.75] - quartiles[0.25]
         higher_outlier = df.quantile(0.75) + (IQR * 1.5)
@@ -75,7 +22,6 @@ class Visualizer:
                 "columns":columns,
                 "nullval":[df[column].isnull().sum()/df.shape[0]*100 for column in columns],
                 "outliers":[self.outliers_count(df[column])/df.shape[0]*100 for column in columns],
-                #"categorical":[False for column in columns]
             })
         st.data_editor(
             self.frame,
@@ -118,12 +64,12 @@ class Visualizer:
             },disabled=["columns"],hide_index=True,
         )
 
-    def target_col(self,df:pd.DataFrame):
+    def target_col(self,df:pd.DataFrame)->{str,str}:
         problem_type=''
         #Select the categorical columns
         self.num_cat_columns = st.multiselect(
             'Select the columns from numerical columns that are categorical in nature',
-            self.num_columns)
+            self.options)
         #Select the target column
         st.write("Choose the Target Column")
         target = st.selectbox(
@@ -144,3 +90,16 @@ class Visualizer:
 
         return target,problem_type
 
+    def usr_input(self,df:pd.DataFrame,num_columns:list,cat_columns:list)->{list,list}:
+        numerical_input={}
+        categorical_input={}
+        for i,column in enumerate(num_columns):
+            number = st.number_input('Insert '+str(column), key=str('numerical')+str(i))
+            numerical_input[column]=[]
+            numerical_input.update({column:number})
+
+        for i,column in enumerate(cat_columns):
+            option = st.selectbox('Choose '+str(column),df[column].unique())
+            categorical_input[column]=[]
+            categorical_input.update({column:option})
+        return numerical_input,categorical_input
