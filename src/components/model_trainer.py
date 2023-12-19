@@ -150,7 +150,7 @@ class ModelTrainer:
             if self.problem_type=='regression':
                 best__score=r2_score(y_test,y_pred)
             else:
-                best__score=accuracy_score(y_test,y_pred,average=None)[0]
+                best__score=accuracy_score(y_test,y_pred)
             
             return best__score, best_params
         except Exception as e:

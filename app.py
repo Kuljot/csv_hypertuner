@@ -83,8 +83,7 @@ if uploaded_file is not None:
 		data_transformation.num_cat_columns=viz.num_cat_columns
 
 		X_train,y_train,X_test,y_test=data_transformation.initiate_data_transformation(target)
-		#st.write("Before initiate_model_trainer")
-		#st.write(X_train.shape)
+
 		modeltrainer=ModelTrainer(problem_type)
 	
 		if problem_type=='regression':
@@ -96,7 +95,7 @@ if uploaded_file is not None:
 		if problem_type=='regression':
 			st.write("Report for the models used and their R2 Score")
 		else:
-			st.write("Report for the models used and their F1 Score")
+			st.write("Report for the models used and their Accuracy Score")
 
 		temp_df=pd.concat([pd.DataFrame(models),pd.DataFrame(scores)],axis=1, ignore_index=True)
 		st.data_editor(temp_df.rename(columns = {0:'Model', 1:'Score'}))
