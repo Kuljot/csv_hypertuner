@@ -18,14 +18,14 @@ Streamlit-powered application to let you convert your csv file to ML model and t
 - Use the generated model to predict the results
 
 Any suggestions are welocme you can contact me 
- [Kuljot Singh] on my email [kuljotme035@gmail.com][df1]
+ [Kuljot Singh] on my email [kuljotme035@gmail.com]
 
 > There is one known issue causing the number of
 > columns to change due to streamlit's behavior
 > of running the entire app from starting 
 > upon interaction with buttons
-> !Please press [R] on the keyboard or press button
-> And it will resolve
+> !Please press [R] on the keyboard or press the button
+> again and it will resolve
 
 
 ## Tech
@@ -39,8 +39,8 @@ CSVtoML uses a number of open source libraries to work :
 - [Pandas](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwiVzuHpu5uDAxU5TWwGHRszBdkQFnoECAUQAQ&url=https%3A%2F%2Fpandas.pydata.org%2F&usg=AOvVaw3cD5ulu4AnZcNusojIyttY&opi=89978449) - handeling the dataframes
 
 
-And CSVtoML itself is open source with a [https://github.com/Kuljot/csv_hypertuner][dill] on GitHub. Built as an educational project. Please treat it for educational purpose only, PLEASE DONT UPLOAD ANY SENSITIVE/PERSONAL INFO.
+And CSVtoML itself is open source with a [https://github.com/Kuljot/csv_hypertuner] on GitHub. Built as an educational project. Please treat it for educational purpose only, PLEASE DONT UPLOAD ANY SENSITIVE/PERSONAL INFO.
 
 ## Installation on your local Machine
 
-Dillinger requires Python 3.11+ to run.
+CSVtoML requires Python 3.11+ to run.
