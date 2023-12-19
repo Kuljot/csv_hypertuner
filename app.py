@@ -71,7 +71,6 @@ if uploaded_file is not None:
 
 	#Select the Target column
 	target,problem_type=viz.target_col(df)
-	#st.write(problem_type)
 
 	proceed_1=st.button('Proceed',use_container_width=True, key=1, on_click=handle_proceed_1)
 	if not proceed_1:
