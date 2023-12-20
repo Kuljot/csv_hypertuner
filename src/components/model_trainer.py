@@ -95,9 +95,9 @@ class ModelTrainer:
     def initiate_model_trainer(self,x_train,y_train,x_test,y_test,param_space):
         try:
             if self.problem_type=='regression':
-                search = GridSearchCV(self.pipeline , param_space, n_jobs=-1, cv=3,scoring='r2')
+                search = GridSearchCV(self.pipeline , param_space, n_jobs=-1, cv=1,scoring='r2')
             else:
-                search = GridSearchCV(self.pipeline , param_space, n_jobs=-1, cv=3,scoring='accuracy')
+                search = GridSearchCV(self.pipeline , param_space, n_jobs=-1, cv=1,scoring='accuracy')
             search_result=search.fit(x_train, y_train)
 
             best_model_score=search_result.best_score_
@@ -130,9 +130,9 @@ class ModelTrainer:
                 )
             
             if self.problem_type=='regression':
-                search = GridSearchCV(estimator=base_estimator , param_grid=param_grid, n_jobs=-1, cv=3,scoring='r2')
+                search = GridSearchCV(estimator=base_estimator , param_grid=param_grid, n_jobs=-1, cv=1,scoring='r2')
             else:
-                search = GridSearchCV(estimator=base_estimator , param_grid=param_grid, n_jobs=-1, cv=3,scoring='accuracy')
+                search = GridSearchCV(estimator=base_estimator , param_grid=param_grid, n_jobs=-1, cv=1,scoring='accuracy')
     
             search_result=search.fit(x_train, y_train)
 
