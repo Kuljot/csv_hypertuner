@@ -9,6 +9,8 @@ Streamlit-powered application to let you convert your csv file to ML model and t
 - The app uses streamlit as frontend
 - Scikit Learn in the Backend
 
+## Link to the app
+https://csvtoml.azurewebsites.net/
 ## Features
 
 - Import a CSV file and watch it magically convert to ML Model
